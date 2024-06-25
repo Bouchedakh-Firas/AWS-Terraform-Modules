@@ -1,3 +1,3 @@
 # AWS-Terraform-Modules
 
-repo that contains AWS modules using terraform
+repo that contains aws modules using terraform
