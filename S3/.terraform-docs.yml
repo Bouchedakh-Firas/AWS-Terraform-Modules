@@ -3,12 +3,16 @@ version: "0.15"
 formatter: markdown table
 header-from: main.tf
 sections:
-  - header
-  - inputs
-  - outputs
-  - providers
-  - requirements
-  - resources
+  inputs:
+    enabled: true
+  outputs:
+    enabled: true
+  providers:
+    enabled: true
+  requirements:
+    enabled: true
+  resources:
+    enabled: true
 output:
   file: README.md
   mode: inject
