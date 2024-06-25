@@ -2,7 +2,12 @@
 
 data "aws_caller_identity" "current" {}
 
-resource "aws_kms_key" "S3_data_bucket_key" {
+
+data "aws_kms_key" "by_alias_arn" {
+  key_id = "arn:aws:kms:eu-west-3:471112643196:key/2050dc78-cf68-49e0-8471-b3febccf36b4"
+}
+
+/* resource "aws_kms_key" "S3_data_bucket_key" {
   description             = "S3 data encryption key"
   enable_key_rotation     = true
   deletion_window_in_days = 7
@@ -64,7 +69,7 @@ resource "aws_kms_key" "S3_data_bucket_key" {
     Name = "S3-KMS"
   }
 }
-
+ */
 ##########################S3######################
 resource "aws_s3_bucket" "data_bucket" {
   bucket = var.s3_bucket_name
@@ -76,6 +81,7 @@ resource "aws_s3_bucket" "data_bucket" {
 
 resource "aws_s3_bucket_ownership_controls" "s3_bucket_acl_ownership" {
   bucket = aws_s3_bucket.data_bucket.id
+  #TODO
   rule {
     object_ownership = "BucketOwnerPreferred"
   }
@@ -94,6 +100,7 @@ resource "aws_s3_bucket_versioning" "versionning" {
   versioning_configuration {
     status = "Enabled"
   }
+
 }
 
 resource "aws_s3_bucket_public_access_block" "bucket_public_access_block" {
@@ -107,13 +114,35 @@ resource "aws_s3_bucket_public_access_block" "bucket_public_access_block" {
 
 resource "aws_s3_bucket_server_side_encryption_configuration" "bucket-encryption" {
   bucket = aws_s3_bucket.data_bucket.id
+  //aws_s3_bucket.data_bucket.id
 
   rule {
     apply_server_side_encryption_by_default {
-      kms_master_key_id = aws_kms_key.S3_data_bucket_key.id
+      /* kms_master_key_id = aws_kms_key.S3_data_bucket_key.id */
+      kms_master_key_id = data.aws_kms_key.by_alias_arn.key_id
       sse_algorithm     = "aws:kms"
     }
   }
+}
+
+resource "aws_s3_bucket_object_lock_configuration" "object_lock" {
+  bucket = aws_s3_bucket.data_bucket.id
+
+  rule {
+    default_retention {
+      mode = "COMPLIANCE"
+      days = 1
+    }
+  }
+  depends_on = [aws_s3_bucket_versioning.versionning]
+}
+
+###exemple of logging , will have to make it use central logging in security account #####
+resource "aws_s3_bucket_logging" "S3-logging" {
+  bucket = aws_s3_bucket.data_bucket.id
+
+  target_bucket = aws_s3_bucket.data_bucket.id
+  target_prefix = "log/"
 }
 
 ##############S3 Policies#############################
@@ -171,7 +200,8 @@ resource "aws_iam_role_policy" "kms_role_policy" {
           "kms:GenerateDataKey*",
           "kms:DescribeKey"
         ],
-        Resource = aws_kms_key.S3_data_bucket_key.arn
+        //     Resource = aws_kms_key.S3_data_bucket_key.arn
+        Resource = data.aws_kms_key.by_alias_arn.key_id
       }
     ]
   })
