@@ -1,0 +1,31 @@
+name: Markdown Documentation and format
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  docs_fmt:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install terraform-docs
+        run: |
+          curl -sSLo $HOME/terraform-docs.tar.gz https://terraform-docs.io/dl/v0.15.0/terraform-docs-v0.15.0-$(uname)-amd64.tar.gz
+          mkdir -p $HOME/terraform-docs && tar -xvf $HOME/terraform-docs.tar.gz -C $HOME/terraform-docs
+          echo "$HOME/terraform-docs" >> $GITHUB_PATH
+      - name: Generate documentation
+        run: |
+          find . -name "*.tf" -not -path "**/.terraform/*" -exec dirname {} \;| sort | uniq | xargs -n 1 -t -I % sh -c "terraform-docs -c .terraform-docs.yml %"
+      - name: Install dprint
+        run: |
+          curl -fsSL https://dprint.dev/install.sh | sh > /dev/null 2>&1
+          echo "/$HOME/.dprint/bin" >> $GITHUB_PATH
+      - name: Run Linter
+        run: |
+          dprint fmt
+      - name: terraform fmt
+        uses: dflook/terraform-fmt@v1
+      - name: Commit changes back to the branch
+        if: ${{ !env.ACT }}
+        uses: stefanzweifel/git-auto-commit-action@v5
