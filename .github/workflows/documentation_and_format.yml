@@ -2,7 +2,7 @@ name: Markdown Documentation and format
 on:
   push:
     branches:
-      - main
+      - dev
 
 jobs:
   docs_fmt:
