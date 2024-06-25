@@ -1,12 +1,32 @@
-version: ">= 0.15.0, < 1.0.0"
-formatter: markdown
-
+# S3/.terraform-docs.yml
+version: "0.15"
+formatter: markdown table
 header-from: main.tf
-
+sections:
+  - header
+  - inputs
+  - outputs
+  - providers
+  - requirements
+  - resources
 output:
-  file: "../README.md"
+  file: README.md
   mode: inject
+  template: |
+    {{ .Header }}
 
-sort:
-  enabled: true
-  by: required
+    ## Inputs
+
+    | Name | Description | Type | Default | Required |
+    |------|-------------|------|---------|:--------:|
+    {{- range .Inputs }}
+    | {{ .Name }} | {{ .Description }} | {{ .Type }} | {{ .Default }} | {{ ternary "yes" "no" .Required }} |
+    {{- end }}
+
+    ## Outputs
+
+    | Name | Description |
+    |------|-------------|
+    {{- range .Outputs }}
+    | {{ .Name }} | {{ .Description }} |
+    {{- end }}
