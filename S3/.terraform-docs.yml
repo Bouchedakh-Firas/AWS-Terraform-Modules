@@ -1,36 +1,12 @@
-# S3/.terraform-docs.yml
-version: "0.15"
-formatter: markdown table
+version: ">= 0.15.0, < 1.0.0"
+formatter: markdown
+
 header-from: main.tf
-sections:
-  inputs:
-    enabled: true
-  outputs:
-    enabled: true
-  providers:
-    enabled: true
-  requirements:
-    enabled: true
-  resources:
-    enabled: true
+
 output:
-  file: README.md
+  file: "../README.md"
   mode: inject
-  template: |
-    {{ .Header }}
 
-    ## Inputs
-
-    | Name | Description | Type | Default | Required |
-    |------|-------------|------|---------|:--------:|
-    {{- range .Inputs }}
-    | {{ .Name }} | {{ .Description }} | {{ .Type }} | {{ .Default }} | {{ ternary "yes" "no" .Required }} |
-    {{- end }}
-
-    ## Outputs
-
-    | Name | Description |
-    |------|-------------|
-    {{- range .Outputs }}
-    | {{ .Name }} | {{ .Description }} |
-    {{- end }}
+sort:
+  enabled: true
+  by: required
