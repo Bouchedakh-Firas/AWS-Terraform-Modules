@@ -16,15 +16,14 @@ jobs:
           echo "$HOME/terraform-docs" >> $GITHUB_PATH
       - name: Generate documentation for S3 module
         working-directory: ./S3
-        run: |
-          terraform-docs -c .terraform-docs.yml .
+        run: terraform-docs -c .terraform-docs.yml .
       - name: Install dprint
         run: |
           curl -fsSL https://dprint.dev/install.sh | sh > /dev/null 2>&1
           echo "$HOME/.dprint/bin" >> $GITHUB_PATH
       - name: Run Linter
-        run: |
-          dprint fmt
+        working-directory: ./S3
+        run: dprint fmt --config dprint.json
       - name: terraform fmt
         uses: dflook/terraform-fmt@v1
       - name: Commit changes back to the branch
