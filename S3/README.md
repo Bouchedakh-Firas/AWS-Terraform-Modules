@@ -24,7 +24,9 @@ No modules.
 | [aws_iam_role_policy.kms_role_policy](https://registry.terraform.io/providers/hashicorp/aws/5.53.0/docs/resources/iam_role_policy) | resource |
 | [aws_s3_bucket.data_bucket](https://registry.terraform.io/providers/hashicorp/aws/5.53.0/docs/resources/s3_bucket) | resource |
 | [aws_s3_bucket_acl.acl](https://registry.terraform.io/providers/hashicorp/aws/5.53.0/docs/resources/s3_bucket_acl) | resource |
+| [aws_s3_bucket_lifecycle_configuration.example_dev_lifecycle](https://registry.terraform.io/providers/hashicorp/aws/5.53.0/docs/resources/s3_bucket_lifecycle_configuration) | resource |
 | [aws_s3_bucket_logging.S3-logging](https://registry.terraform.io/providers/hashicorp/aws/5.53.0/docs/resources/s3_bucket_logging) | resource |
+| [aws_s3_bucket_notification.bucket_notification](https://registry.terraform.io/providers/hashicorp/aws/5.53.0/docs/resources/s3_bucket_notification) | resource |
 | [aws_s3_bucket_object_lock_configuration.object_lock](https://registry.terraform.io/providers/hashicorp/aws/5.53.0/docs/resources/s3_bucket_object_lock_configuration) | resource |
 | [aws_s3_bucket_ownership_controls.s3_bucket_acl_ownership](https://registry.terraform.io/providers/hashicorp/aws/5.53.0/docs/resources/s3_bucket_ownership_controls) | resource |
 | [aws_s3_bucket_policy.allow_access_from_another_account](https://registry.terraform.io/providers/hashicorp/aws/5.53.0/docs/resources/s3_bucket_policy) | resource |
