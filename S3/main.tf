@@ -145,6 +145,14 @@ resource "aws_s3_bucket_logging" "S3-logging" {
   target_prefix = "log/"
 }
 
+######## Event Notification ##############################
+
+resource "aws_s3_bucket_notification" "bucket_notification" {
+  bucket      = aws_s3_bucket.data_bucket.id
+  eventbridge = true
+}
+
+
 ##############S3 Policies#############################
 
 data "template_file" "iam-policy-template" {
@@ -161,6 +169,28 @@ resource "aws_s3_bucket_policy" "allow_access_from_another_account" {
   policy     = data.template_file.iam-policy-template.rendered
   depends_on = [aws_s3_bucket.data_bucket]
 }
+
+resource "aws_s3_bucket_lifecycle_configuration" "example_dev_lifecycle" {
+  bucket = aws_s3_bucket.data_bucket.id
+
+  rule {
+    id     = "ManageLifecycleAndArchive"
+    status = "Enabled"
+    filter {
+      prefix = "health/"
+    }
+
+    transition {
+      days          = 30
+      storage_class = "GLACIER"
+    }
+
+    expiration {
+      days = 90
+    }
+  }
+}
+
 
 ##############IAM Role for KMS########################
 
