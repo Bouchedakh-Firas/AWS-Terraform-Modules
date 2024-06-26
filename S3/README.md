@@ -49,5 +49,7 @@ No modules.
 
 | Name | Description |
 |------|-------------|
+| <a name="output_kms_key_id"></a> [kms\_key\_id](#output\_kms\_key\_id) | The ID of the KMS key |
+| <a name="output_kms_role_arn"></a> [kms\_role\_arn](#output\_kms\_role\_arn) | The ARN of the KMS role |
 | <a name="output_s3_bucket_id"></a> [s3\_bucket\_id](#output\_s3\_bucket\_id) | The ID of the S3 bucket |
 <!-- END_TF_DOCS -->
