@@ -34,3 +34,5 @@ override.tf.json
 .terraformrc
 terraform.rc
 S3/.terraform.lock.hcl
+/import testing
+t
